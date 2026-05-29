@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-do</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Ambient Background ─────────────────────────────────────────────── -->
+  <div class="bg-canvas">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ── App Shell ──────────────────────────────────────────────────────── -->
+  <div class="app-shell">
+
+    <!-- ── Sidebar ────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-mark">◈</span>
+        <span class="logo-text">To-Do</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-filter="all">
+          <span class="nav-icon">◉</span>
+          <span>All Tasks</span>
+          <span class="nav-badge" id="badge-all">0</span>
+        </button>
+        <button class="nav-item" data-filter="today">
+          <span class="nav-icon">◷</span>
+          <span>Today</span>
+          <span class="nav-badge" id="badge-today">0</span>
+        </button>
+        <button class="nav-item" data-filter="pending">
+          <span class="nav-icon">◌</span>
+          <span>Pending</span>
+          <span class="nav-badge" id="badge-pending">0</span>
+        </button>
+        <button class="nav-item" data-filter="completed">
+          <span class="nav-icon">◍</span>
+          <span>Completed</span>
+          <span class="nav-badge" id="badge-completed">0</span>
+        </button>
+        <button class="nav-item" data-filter="overdue">
+          <span class="nav-icon">⚠</span>
+          <span>Overdue</span>
+          <span class="nav-badge nav-badge--danger" id="badge-overdue">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-section-title">Categories</div>
+      <div class="category-list" id="category-list">
+        <!-- Rendered by JS -->
+      </div>
+      <button class="add-category-btn" id="add-category-btn">
+        <span>+</span> New Category
+      </button>
+
+      <div class="sidebar-stats">
+        <div class="stat-ring-wrap">
+          <svg class="stat-ring" viewBox="0 0 80 80">
+            <circle class="ring-bg" cx="40" cy="40" r="34" />
+            <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="34"
+              stroke-dasharray="213.6" stroke-dashoffset="213.6" />
+          </svg>
+          <div class="ring-label">
+            <span class="ring-pct" id="ring-pct">0%</span>
+            <span class="ring-sub">done</span>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-cell">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-lbl">Total</span>
+          </div>
+          <div class="stat-cell">
+            <span class="stat-num" id="stat-done">0</span>
+            <span class="stat-lbl">Done</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ────────────────────────────────────────────────── -->
+    <main class="main-content">
+
+      <!-- Header -->
+      <header class="main-header">
+        <div class="header-left">
+          <button class="menu-btn" id="menu-btn" aria-label="Toggle menu">☰</button>
+          <div class="header-title-wrap">
+            <h1 class="header-title" id="header-title">All Tasks</h1>
+            <p class="header-date" id="header-date"></p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input type="text" class="search-input" id="search-input" placeholder="Search tasks…" />
+          </div>
+          <div class="sort-wrap">
+            <select class="sort-select" id="sort-select">
+              <option value="createdAt">Newest</option>
+              <option value="dueDate">Due Date</option>
+              <option value="priority">Priority</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <!-- Priority Quick Filter -->
+      <div class="priority-pills">
+        <button class="pill active" data-priority="">All</button>
+        <button class="pill pill--urgent" data-priority="urgent">Urgent</button>
+        <button class="pill pill--high" data-priority="high">High</button>
+        <button class="pill pill--medium" data-priority="medium">Medium</button>
+        <button class="pill pill--low" data-priority="low">Low</button>
+      </div>
+
+      <!-- Task List -->
+      <div class="task-list" id="task-list">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon">✦</div>
+          <p class="empty-title">No tasks yet</p>
+          <p class="empty-sub">Press the button below to add your first task</p>
+        </div>
+      </div>
+
+      <!-- FAB -->
+      <button class="fab" id="fab-add" aria-label="Add task">
+        <span class="fab-icon">+</span>
+      </button>
+
+    </main>
+  </div>
+
+  <!-- ── Modal: Add / Edit Todo ───────────────────────────────────────────── -->
+  <div class="modal-overlay" id="todo-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-heading" id="modal-heading">New Task</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field-group">
+          <label class="field-label" for="todo-title">Task Title <span class="req">*</span></label>
+          <input type="text" id="todo-title" class="field-input" placeholder="What needs to be done?" maxlength="200" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="todo-desc">Description</label>
+          <textarea id="todo-desc" class="field-input field-textarea" placeholder="Add details, notes, or steps…" maxlength="1000" rows="3"></textarea>
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="todo-priority">Priority</label>
+            <select id="todo-priority" class="field-input field-select">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🟠 High</option>
+              <option value="urgent">🔴 Urgent</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="todo-due">Due Date</label>
+            <input type="date" id="todo-due" class="field-input" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="todo-category">Category</label>
+          <select id="todo-category" class="field-input field-select">
+            <option value="">— None —</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="todo-tags">Tags <span class="field-hint">(comma-separated)</span></label>
+          <input type="text" id="todo-tags" class="field-input" placeholder="work, personal, urgent…" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn--ghost" id="modal-cancel">Cancel</button>
+        <button class="btn btn--primary" id="modal-submit">Create Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal: Add Category ─────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="category-modal" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card--sm">
+      <div class="modal-header">
+        <h2 class="modal-heading">New Category</h2>
+        <button class="modal-close" id="cat-modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label class="field-label" for="cat-name">Name <span class="req">*</span></label>
+          <input type="text" id="cat-name" class="field-input" placeholder="e.g. Work, Personal…" maxlength="50" />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="cat-color">Color</label>
+            <input type="color" id="cat-color" class="field-input field-color" value="#6366f1" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="cat-icon">Icon (emoji)</label>
+            <input type="text" id="cat-icon" class="field-input" placeholder="📁" maxlength="4" value="📁" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--ghost" id="cat-modal-cancel">Cancel</button>
+        <button class="btn btn--primary" id="cat-modal-submit">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast Notification ──────────────────────────────────────────────── -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
