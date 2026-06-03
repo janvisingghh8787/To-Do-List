@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     DB_NAME: str = "smart_todo"
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
-    DEBUG: bool = True
+    DEBUG: bool = False
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
