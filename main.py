@@ -7,11 +7,12 @@ Run with:
     uvicorn main:app --reload
 """
 
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from database import init_db
 from config import settings
@@ -44,13 +45,23 @@ app.include_router(stats.router,      prefix="/api/stats",      tags=["Stats"])
 
 
 # ── Serve static files (HTML/CSS/JS frontend) ────────────────────────────────
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Guard: only mount if the directory actually exists (prevents crash on Render
+# when the static/ folder hasn't been committed to the repo yet).
+if os.path.isdir("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # ── Catch-all: serve index.html for any non-API route ────────────────────────
 @app.get("/", include_in_schema=False)
 async def serve_frontend():
-    return FileResponse("static/index.html")
+    index = "static/index.html"
+    if os.path.isfile(index):
+        return FileResponse(index)
+    # Fallback: API is live but no frontend built yet
+    return JSONResponse({
+        "status": "ok",
+        "message": "Smart Todo API is running. Visit /docs for Swagger UI.",
+    })
 
 
 # ── Run directly with `python main.py` ───────────────────────────────────────
