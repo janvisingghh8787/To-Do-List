@@ -122,8 +122,22 @@ async def list_todos(
     else:
         find_query = find_query.sort(-sort_field)
 
-    todos = await find_query.to_list()
-    return {"success": True, "count": len(todos), "data": [_serialize(t) for t in todos]}
+    try:
+        todos = await find_query.to_list()
+        print("TODOS FOUND:", len(todos))
+        data = []
+        for t in todos:
+            print("SERIALIZING:", t.id)
+            data.append(_serialize(t))
+        return {
+            "success": True,
+            "count": len(todos),
+            "data": data
+        }
+
+    except Exception as e:
+        print("LIST TODOS ERROR:", repr(e))
+        raise
 
 
 # ── POST /api/todos ───────────────────────────────────────────────────────────
