@@ -47,7 +47,13 @@ class Todo(Document):
     def is_overdue(self) -> bool:
         if not self.due_date or self.completed:
             return False
-        return datetime.now(timezone.utc) > self.due_date
+        due = self.due_date
+
+    # Convert old MongoDB naive datetimes to UTC-aware
+        if due.tzinfo is None:
+            due = due.replace(tzinfo=timezone.utc)
+
+        return datetime.now(timezone.utc) > due
 
     # ── Auto-set completed_at ────────────────────────────────────────────────
     @model_validator(mode="after")
