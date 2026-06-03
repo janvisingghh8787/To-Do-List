@@ -1,76 +1,92 @@
-#Smart Todo App
+# Smart Todo App
 
-A modern full-stack Todo Management application built using **Node.js, Express.js, MongoDB Atlas, HTML, CSS, and JavaScript**.
+A modern full-stack Todo Management application built using **FastAPI, MongoDB Atlas, HTML, CSS, and JavaScript**.
 
-It helps users organize tasks efficiently with categories, priorities, due dates, progress tracking, and task filtering.
+The application helps users organize tasks efficiently with categories, priorities, due dates, progress tracking, filtering, and real-time statistics.
 
 ---
+
 ##Live Demo
 
-🔗 https://to-do-list-dtvt.onrender.com
+🔗 https://your-render-url.onrender.com
+
+---
 
 ##Features
 
 ### Task Management
-- Create new tasks
-- Edit existing tasks
-- Delete tasks
-- Mark tasks as completed
-- Add task descriptions
-- Assign due dates
-- Add tags to tasks
+
+* Create new tasks
+* Edit existing tasks
+* Delete tasks
+* Mark tasks as completed
+* Add task descriptions
+* Assign due dates
+* Add tags to tasks
 
 ### Categories
-- Create custom categories
-- Assign colors and icons to categories
-- Filter tasks by category
+
+* Create custom categories
+* Assign colors and icons to categories
+* Filter tasks by category
 
 ### Task Priorities
-- 🔴 Urgent
-- 🟠 High
-- 🟡 Medium
-- 🟢 Low
+
+* 🔴 Urgent
+* 🟠 High
+* 🟡 Medium
+* 🟢 Low
 
 ### Filters
-- All Tasks
-- Today's Tasks
-- Pending Tasks
-- Completed Tasks
-- Overdue Tasks
+
+* All Tasks
+* Today's Tasks
+* Pending Tasks
+* Completed Tasks
+* Overdue Tasks
 
 ### Search & Sort
-- Search tasks by title, description, or tags
-- Sort by:
-  - Newest
-  - Due Date
-  - Priority
+
+* Search tasks by title, description, or tags
+* Sort by:
+
+  * Newest
+  * Due Date
+  * Priority
 
 ### Dashboard
-- Progress Ring
-- Completion Percentage
-- Total Tasks Counter
-- Completed Tasks Counter
+
+* Progress Tracking
+* Completion Percentage
+* Total Tasks Counter
+* Completed Tasks Counter
+* Category Statistics
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- HTML5
-- CSS3
-- Vanilla JavaScript
+
+* HTML5
+* CSS3
+* Vanilla JavaScript
 
 ### Backend
-- Node.js
-- Express.js
+
+* FastAPI
+* Uvicorn
 
 ### Database
-- MongoDB Atlas
-- Mongoose
 
-### Development Tools
-- Nodemon
-- dotenv
+* MongoDB Atlas
+* Beanie ODM
+* Motor
+
+### Configuration
+
+* Pydantic Settings
+* Python Dotenv
 
 ---
 
@@ -80,144 +96,183 @@ It helps users organize tasks efficiently with categories, priorities, due dates
 To Do List - Full Stack/
 │
 ├── models/
-│   ├── Todo.js
-│   └── Category.js
+│   ├── todo.py
+│   ├── category.py
+│   └── __init__.py
 │
-├── routes/
-│   ├── todos.js
-│   ├── categories.js
-│   └── stats.js
+├── routers/
+│   ├── todos.py
+│   ├── categories.py
+│   └── stats.py
 │
-├── public/
-│   ├── index.html
-│   ├── style.css
+├── static/
+│   ├── css/
+│   │   └── style.css
 │   │
-│   └── js/
-│       ├── api.js
-│       ├── ui.js
-│       └── app.js
+│   ├── js/
+│   │   ├── api.js
+│   │   ├── ui.js
+│   │   └── app.js
+│   │
+│   └── index.html
 │
-├── server.js
-├── package.json
+├── config.py
+├── database.py
+├── main.py
+├── requirements.txt
 ├── .env
 └── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ### Clone Repository
 
 ```bash
-git clone https://github.com/your-username/opus-smart-todo.git
-cd opus-smart-todo
+git clone https://github.com/janvisingghh8787/To-Do-List.git
+cd To-Do-List
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate Virtual Environment
+
+#### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+#### Linux / macOS
+
+```bash
+source venv/bin/activate
 ```
 
 ### Install Dependencies
 
 ```bash
-npm install
-```
-
-### Create Environment File
-
-Create a `.env` file in the root directory:
-
-```env
-MONGODB_URI=your_mongodb_connection_string
-PORT=5000
+pip install -r requirements.txt
 ```
 
 ---
 
-## Run the Application
+##Environment Variables
+
+Create a `.env` file:
+
+```env
+MONGODB_URL=your_mongodb_connection_string
+DB_NAME=smart_todo
+```
+
+---
+
+##Run the Application
 
 Development Mode:
 
 ```bash
-npm run dev
+uvicorn main:app --reload
 ```
 
-Production Mode:
-
-```bash
-npm start
-```
-
-Server runs at:
+Application:
 
 ```text
-http://localhost:5000
+http://127.0.0.1:8000
+```
+
+Swagger API Documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+ReDoc Documentation:
+
+```text
+http://127.0.0.1:8000/redoc
 ```
 
 ---
 
-## MongoDB Atlas Setup
+##Deployment
 
-1. Create a MongoDB Atlas account.
-2. Create a cluster.
-3. Create a database user.
-4. Add your IP address to Network Access.
-5. Copy the connection string.
-6. Paste it into the `.env` file.
+The application can be deployed using:
 
-Example:
+* Render
+* Railway
+* Azure App Service
+* AWS EC2
 
-```env
-MONGODB_URI=mongodb://username:password@cluster-url/database-name
+Example Render Start Command:
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Dashboard
 
-- Sidebar Navigation
-- Task Statistics
-- Progress Ring
-- Task Filters
+* Task Overview
+* Progress Tracking
+* Category Statistics
 
 ### Task Management
 
-- Create Task Modal
-- Edit Task
-- Delete Task
-- Category Management
+* Create Task
+* Edit Task
+* Delete Task
+* Category Management
 
 ---
 
-## Future Enhancements
+##Future Enhancements
 
-- User Authentication
-- Dark / Light Theme Toggle
-- Drag & Drop Task Sorting
-- Email Reminders
-- Calendar View
-- Cloud Sync
-- Mobile App Version
-
----
-
-## Learning Outcomes
-
-This project helped in understanding:
-
-- REST API development
-- MongoDB Atlas integration
-- Express.js routing
-- CRUD operations
-- Frontend and backend integration
-- Environment variable management
-- Full-stack application architecture
+* User Authentication
+* Dark / Light Theme
+* Drag & Drop Tasks
+* Email Reminders
+* Calendar View
+* Mobile Responsive Improvements
+* User Accounts & Cloud Sync
 
 ---
 
-## Author
+##Learning Outcomes
+
+This project helped strengthen knowledge in:
+
+* FastAPI Development
+* REST API Design
+* MongoDB Atlas Integration
+* Beanie ODM
+* CRUD Operations
+* Frontend & Backend Integration
+* Environment Variable Management
+* Full-Stack Application Architecture
+* Deployment & Cloud Hosting
+
+---
+
+##Author
 
 **Janvi Singh**
+
+Bachelor of Technology (BTech) in Computer Science.
+
+---
 
 ##License
 
 This project is developed for educational and portfolio purposes.
+
