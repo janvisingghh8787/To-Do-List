@@ -22,9 +22,9 @@ from routers import todos, categories, stats
 # ── Lifespan: runs once on startup & shutdown ────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()          # connect to MongoDB + init Beanie
+    print("STARTING APP")
+    await init_db()
     yield
-    print("👋  Shutting down…")
 
 
 # ── App instance ─────────────────────────────────────────────────────────────
