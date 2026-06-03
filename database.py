@@ -14,6 +14,7 @@ from models.category import Category
 
 
 async def init_db() -> None:
+    print("MONGODB_URL =", settings.MONGODB_URL)
     client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
     database = client[settings.DB_NAME]
 
