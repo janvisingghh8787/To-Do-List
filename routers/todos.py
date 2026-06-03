@@ -196,13 +196,21 @@ async def update_todo(todo_id: str, body: TodoUpdate):
 
 @router.patch("/{todo_id}/toggle")
 async def toggle_todo(todo_id: str):
-    todo = await _get_or_404(todo_id)
-    todo.completed = not todo.completed
-    todo.completed_at = datetime.now(timezone.utc) if todo.completed else None
-    todo.updated_at = datetime.now(timezone.utc)
-    await todo.save()
-    await todo.fetch_all_links()
-    return {"success": True, "data": _serialize(todo)}
+    try:
+        todo = await _get_or_404(todo_id)
+
+        todo.completed = not todo.completed
+        todo.completed_at = datetime.now(timezone.utc) if todo.completed else None
+        todo.updated_at = datetime.now(timezone.utc)
+
+        await todo.save()
+        await todo.fetch_all_links()
+
+        return {"success": True, "data": _serialize(todo)}
+
+    except Exception as e:
+        print("TOGGLE ERROR:", repr(e))
+        raise
 
 
 # ── DELETE /api/todos/completed/all ──────────────────────────────────────────
